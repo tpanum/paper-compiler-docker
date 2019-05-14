@@ -10,21 +10,26 @@ RUN apt-get update -q \
 RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
 	mkdir /install-tl-unx; \
 	tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1; \
-    echo "selected_scheme scheme-full" >> /install-tl-unx/texlive.profile; \
+    echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile; \
 	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
+
+ENV PATH="/usr/local/texlive/2018/bin/x86_64-linux:${PATH}"
+RUN wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh; \
+    sh update-tlmgr-latest.sh
 
 RUN add-apt-repository -y ppa:kelleyk/emacs
 RUN apt-get update -q \
     && apt-get install -qy emacs26 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/usr/local/texlive/2018/bin/x86_64-linux:${PATH}"
 
 ENV HOME /data
 WORKDIR /data
 
-RUN tlmgr install latexmk
+RUN ls /usr/local/texlive/
+RUN tlmgr update --self --all
+RUN tlmgr install latexmk ulem float wrapfig soul marvosym wasysym hyperref collection-fontsrecommended
 
 VOLUME ["/data"]
