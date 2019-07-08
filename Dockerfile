@@ -3,7 +3,7 @@ MAINTAINER Thomas Kobber Panum <thomas@panum.dk>
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -q \
-    && apt-get install -qy build-essential wget libfontconfig1 software-properties-common \
+    && apt-get install -qy build-essential wget python libfontconfig1 software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
 # Install TexLive with scheme-basic
@@ -15,7 +15,7 @@ RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
 
-ENV PATH="/usr/local/texlive/2018/bin/x86_64-linux:${PATH}"
+ENV PATH="/usr/local/texlive/2019/bin/x86_64-linux:${PATH}"
 RUN wget http://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh; \
     sh update-tlmgr-latest.sh
 
@@ -29,7 +29,8 @@ ENV HOME /data
 WORKDIR /data
 
 RUN ls /usr/local/texlive/
-RUN tlmgr update --self --all
+RUN tlmgr update --self
 RUN tlmgr install latexmk ulem float wrapfig soul marvosym wasysym hyperref collection-fontsrecommended libertine texliveonfly
+RUN rm -r /usr/local/texlive/2019/texmf-dist/doc
 
 VOLUME ["/data"]
