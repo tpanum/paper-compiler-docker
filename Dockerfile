@@ -30,6 +30,6 @@ WORKDIR /data
 
 RUN ls /usr/local/texlive/
 RUN tlmgr update --self --all
-RUN tlmgr install latexmk ulem float wrapfig soul marvosym wasysym hyperref collection-fontsrecommended
+RUN tlmgr install latexmk ulem float wrapfig soul marvosym wasysym hyperref collection-fontsrecommended libertine
 
 VOLUME ["/data"]
